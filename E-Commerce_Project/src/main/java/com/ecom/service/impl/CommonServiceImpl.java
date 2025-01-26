@@ -23,7 +23,7 @@ public class CommonServiceImpl implements CommonService {
 		LocalDateTime now = LocalDateTime.now().withNano(0);
 
 		// Define the formatter to exclude fractional seconds
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy  HH:mm:ss");
 
 		// Format the LocalDateTime
 		String formattedTime = now.format(formatter);
