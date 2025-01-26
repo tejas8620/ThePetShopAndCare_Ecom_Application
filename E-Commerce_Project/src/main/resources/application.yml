@@ -1,0 +1,19 @@
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: tejas@123
+    username: root
+    url: jdbc:mysql://localhost:3306/petshop
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+  application:
+    name: ThePetCareShop
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
