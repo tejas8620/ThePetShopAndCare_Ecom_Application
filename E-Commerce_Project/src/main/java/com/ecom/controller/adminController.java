@@ -27,6 +27,7 @@ import com.ecom.service.CategoryService;
 import com.ecom.service.CommonService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 
 @Controller
@@ -106,6 +107,48 @@ public class adminController {
 		}
 		
 		return "redirect:/admin/category";
+	}
+	
+	
+	@GetMapping("/loadEditCategory/{id}")
+	public String loadEditCategory(@PathVariable int id, Model m) {
+		m.addAttribute("category", categoryService.getCategoryById(id));
+		return "admin/edit_category";
+	}
+	
+	
+	@PostMapping("/updateCategory")
+	public String updateCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
+		
+		Category oldCategory = categoryService.getCategoryById(category.getId());
+		String imageName = file.isEmpty() ? oldCategory.getImageName(): file.getOriginalFilename();
+		
+		if(!ObjectUtils.isEmpty(category)) {
+			
+			oldCategory.setName(category.getName());
+			oldCategory.setIsActive(category.getIsActive());
+			oldCategory.setImageName(imageName);
+			oldCategory.setUpdatedTime(commonService.getDateTime());
+		}
+		
+		Category updateCategory = categoryService.saveCategory(oldCategory);
+		
+		if(!ObjectUtils.isEmpty(updateCategory)) {
+			
+			File saveFile = new ClassPathResource("static/img").getFile();
+			
+			Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+"category_img"+File.separator+file.getOriginalFilename());
+			
+			System.out.println(path);
+			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+			
+			session.setAttribute("successMsg", "Category Update Successfully");
+		}
+		else {
+			session.setAttribute("errorMsg", "Something wrong on server.!");
+		}
+		
+		return "redirect:/admin/loadEditCategory/"+ category.getId();
 	}
 	
 	

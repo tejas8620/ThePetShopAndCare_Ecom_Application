@@ -13,5 +13,7 @@ public interface CategoryService {
 	public List<com.ecom.model.Category> getAllCategory();
 	
 	public Boolean deleteCategory(int id);
+	
+	public Category getCategoryById(int id);
 
 }
