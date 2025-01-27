@@ -14,16 +14,16 @@
 				<div class="col-md-3">
 					<div class="card card-sh">
 						<div class="card-header text-center ">
-							<p class="fs-4">Add Category</p>
+							<p class="fs-4 fw-bold">Add Category</p>
 							<th:block th:if="${session.successMsg}">
 								<p class="text-success fw-bold">[[${session.successMsg}]]</p>
 								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-								</th:block>
+							</th:block>
 
 							<th:block th:if="${session.errorMsg}">
 								<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
 								<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
-								</th:block>
+							</th:block>
 
 						</div>
 						<div class="class-body p-3">
@@ -63,8 +63,17 @@
 
 				<div class="col-md-9">
 					<div class="card card-sh">
-						<div class="card-header text-center fs-4 fw-bold">Category
-							Details</div>
+						<div class="card-header text-center"/>
+						<p class="fs-4 fw-bold">Category Details</p>
+						<th:block th:if="${session.succMsg}">
+							<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+							<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+						</th:block>
+
+						<th:block th:if="${session.errMsg}">
+							<p class="text-danger fw-bold">[[${session.errMsg}]]</p>
+							<th:block th:text="${@commonServiceImpl.removeSessionMessage()}"></th:block>
+						</th:block>
 						<div class="card-body">
 							<table class="table">
 								<thead>
@@ -72,16 +81,27 @@
 										<th scope="col">Sr.No.</th>
 										<th scope="col">Category Name</th>
 										<th scope="col">Image</th>
+										<th scope="col">Status</th>
 										<th scope="col">Updated Date</th>
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<th scope="row">1</th>
-										<td>Mark</td>
-										<td>Otto</td>
-										<td>@mdo</td>
+									<tr th:each="category,c:${categories}">
+										<th scope="row">[[${c.count}]]</th>
+										<td>[[${category.name}]]</td>
+										<td><img
+											th:src="@{'/img/category_img/'+${category.imageName}}"
+											width=50px height=50px></td>
+										<td>[[${category.isActive}]]</td>
+										<td>[[${category.updatedTime}]]</td>
+										<td><a
+											th:href="@{'/admin/loadEditCategory/'+${category.id}}"
+											class="btn btn-success btn-sm"><i
+												class="fa-solid fa-pen-to-square  fa-1x"></i> Edit </a> <a
+											th:href="@{'/admin/deleteCategory/'+${category.id}}"
+											class="btn btn-danger btn-sm"><i
+												class="fa-solid fa-trash  fa-1x"></i> Delete</a></td>
 									</tr>
 
 								</tbody>

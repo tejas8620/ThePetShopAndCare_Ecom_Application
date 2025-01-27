@@ -11,5 +11,7 @@ public interface CategoryService {
 	public Boolean existCategory(String name);
 	
 	public List<com.ecom.model.Category> getAllCategory();
+	
+	public Boolean deleteCategory(int id);
 
 }

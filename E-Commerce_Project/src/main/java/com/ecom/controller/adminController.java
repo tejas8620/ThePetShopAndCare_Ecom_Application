@@ -12,9 +12,11 @@ import java.nio.file.StandardCopyOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +27,7 @@ import com.ecom.service.CategoryService;
 import com.ecom.service.CommonService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.server.PathParam;
 
 @Controller
 @RequestMapping("/admin")
@@ -51,7 +54,8 @@ public class adminController {
 	
 	
 	@GetMapping("/category")
-	public String addCategory() {
+	public String addCategory(Model m) {
+		m.addAttribute("categories", categoryService.getAllCategory());
 		return "admin/category";
 	}
 	
@@ -89,5 +93,20 @@ public class adminController {
 		
 		return "redirect:/admin/category";
 	}
+	
+	
+	@GetMapping("/deleteCategory/{id}")
+	public String deleteCategory(@PathVariable int id, HttpSession session) {
+		Boolean deleteCategory = categoryService.deleteCategory(id);
+		
+		if(deleteCategory) {
+			session.setAttribute("succMsg", "Category delete Successfully");
+		}else {
+			session.setAttribute("errMsg", "Something went wrong! plz try later..");
+		}
+		
+		return "redirect:/admin/category";
+	}
+	
 	
 }
