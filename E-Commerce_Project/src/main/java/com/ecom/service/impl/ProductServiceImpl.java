@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public Boolean deleteProduct(Integer id) {
 		
-		Optional<Product> product = productRepo.findById(id);
+		Product product = productRepo.findById(id).orElse(null);
 		
 		if(! ObjectUtils.isEmpty(product)) {
 			productRepo.deleteById(id);
