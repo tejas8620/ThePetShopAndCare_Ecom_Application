@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -23,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.model.Category;
+import com.ecom.model.Product;
 import com.ecom.service.CategoryService;
 import com.ecom.service.CommonService;
+import com.ecom.service.ProductService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
@@ -41,6 +44,9 @@ public class adminController {
 	@Autowired
 	private CommonService commonService;
 	
+	@Autowired
+	private ProductService productService;
+	
 
 	@GetMapping("/")
 	public String admin() {
@@ -49,7 +55,9 @@ public class adminController {
 	
 	
 	@GetMapping("/loadAddProduct")
-	public String loadAddProduct() {
+	public String loadAddProduct(Model m) {
+		List<Category> allCategories = categoryService.getAllCategory();
+		m.addAttribute("allCategories", allCategories);
 		return"admin/add_product";
 	}
 	
@@ -80,13 +88,7 @@ public class adminController {
 				session.setAttribute("errorMsg", "Not saved! internal server error..");
 			}
 			else {
-				
-				File saveFile = new ClassPathResource("static/img").getFile();
-				
-				Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+"category_img"+File.separator+file.getOriginalFilename());
-				
-				System.out.println(path);
-				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				commonService.copyCategoryImage(file);
 				
 				session.setAttribute("successMsg", "Saved Successfully");
 			}
@@ -135,12 +137,7 @@ public class adminController {
 		
 		if(!ObjectUtils.isEmpty(updateCategory)) {
 			
-			File saveFile = new ClassPathResource("static/img").getFile();
-			
-			Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+"category_img"+File.separator+file.getOriginalFilename());
-			
-			System.out.println(path);
-			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+			commonService.copyCategoryImage(file);
 			
 			session.setAttribute("successMsg", "Category Update Successfully");
 		}
@@ -149,6 +146,29 @@ public class adminController {
 		}
 		
 		return "redirect:/admin/loadEditCategory/"+ category.getId();
+	}
+	
+	
+	@PostMapping("/saveProduct")
+	public String saveProduct(@ModelAttribute Product product, @RequestParam("file") MultipartFile image, HttpSession session) throws IOException {
+		
+		String imageName = image.isEmpty() ? "default.jpg" : image.getOriginalFilename();
+		product.setImage(imageName);
+		product.setUpdatedTime(commonService.getDateTime());
+		
+		Product saveProduct = productService.saveProduct(product);
+		
+		if(!ObjectUtils.isEmpty(saveProduct)) {
+			
+			commonService.copyProductImage(image);
+			
+			session.setAttribute("successMsg", "Product Saved Successfully..!");
+		}
+		else {
+			session.setAttribute("errorMsg", "Something wrong on server..!");
+		}
+		
+		return "redirect:/admin/loadAddProduct";
 	}
 	
 	
