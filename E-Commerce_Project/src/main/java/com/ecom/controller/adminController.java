@@ -172,4 +172,14 @@ public class adminController {
 	}
 	
 	
+	@GetMapping("/products")
+	public String viewProducts(Model m) {
+		
+		List<Product> allProducts = productService.getAllProducts();
+		m.addAttribute("products", allProducts);
+		
+		return "/admin/products";
+	}
+	
+	
 }
