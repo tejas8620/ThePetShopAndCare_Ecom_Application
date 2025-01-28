@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
 	@Override
-	public Boolean deleteCategory(int id) {
+	public Boolean deleteCategory(Integer id) {
 		
 		Category category = categoryRepo.findById(id).orElse(null);
 		
@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
 	@Override
-	public Category getCategoryById(int id) {
+	public Category getCategoryById(Integer id) {
 		Category category = categoryRepo.findById(id).orElse(null);
 		return category;
 	}

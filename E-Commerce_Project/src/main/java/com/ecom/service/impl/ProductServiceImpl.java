@@ -1,9 +1,11 @@
 package com.ecom.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.ecom.model.Product;
 import com.ecom.repo.ProductRepository;
@@ -27,6 +29,19 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public List<Product> getAllProducts() {
 		return productRepo.findAll();
+	}
+	
+	@Override
+	public Boolean deleteProduct(Integer id) {
+		
+		Optional<Product> product = productRepo.findById(id);
+		
+		if(! ObjectUtils.isEmpty(product)) {
+			productRepo.deleteById(id);
+			return true;
+		}
+		
+		return false;
 	}
 
 }
