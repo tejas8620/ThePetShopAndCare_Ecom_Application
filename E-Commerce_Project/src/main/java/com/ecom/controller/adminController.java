@@ -190,4 +190,11 @@ public class adminController {
 	}
 	
 	
+	@PostMapping("/editProduct/{id}")
+	public String editProduct(@RequestParam int id) {
+		
+		return "";
+	}
+	
+	
 }
