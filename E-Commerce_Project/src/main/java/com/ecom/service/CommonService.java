@@ -11,9 +11,7 @@ public interface CommonService {
 	
 	public void removeSessionMessage();
 	
-	public void copyCategoryImage(MultipartFile file) throws IOException;
-
-	public void copyProductImage(MultipartFile image) throws IOException;
+	public void copyImageFolder(String folderPath, MultipartFile file) throws IOException;
 	
 	
 	

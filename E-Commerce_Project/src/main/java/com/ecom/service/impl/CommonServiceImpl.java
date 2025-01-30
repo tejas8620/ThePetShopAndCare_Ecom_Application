@@ -54,30 +54,17 @@ public class CommonServiceImpl implements CommonService {
 	
 
 	@Override
-	public void copyCategoryImage(MultipartFile file) throws IOException {
+	public void copyImageFolder(String folderPath, MultipartFile file) throws IOException {
 		
 		File saveFile = new ClassPathResource("static/img").getFile();
 		
-		Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+"category_img"+File.separator+file.getOriginalFilename());
+		Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+folderPath+File.separator+file.getOriginalFilename());
 		
 		System.out.println(path);
 		Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
 	}
 	
-	
-	
-	@Override
-	public void copyProductImage(MultipartFile image) throws IOException {
-		
-		File saveFile = new ClassPathResource("static/img").getFile();
-		
-		Path path = Paths.get(saveFile.getAbsolutePath()+File.separator+"product_img"+File.separator+image.getOriginalFilename());
-		
-		System.out.println(path);
-		Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-		
-	}
 	
 	
 	
