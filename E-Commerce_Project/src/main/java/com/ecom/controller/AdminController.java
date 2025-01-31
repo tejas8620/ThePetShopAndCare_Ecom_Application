@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
-public class adminController {
+public class AdminController {
 
 	@Autowired
 	private CategoryService categoryService;
@@ -135,6 +135,7 @@ public class adminController {
 
 		String imageName = image.isEmpty() ? "default.jpg" : image.getOriginalFilename();
 		product.setImage(imageName);
+		product.setDiscount(0);
 		product.setUpdatedTime(commonService.getDateTime());
 
 		Product saveProduct = productService.saveProduct(product);
@@ -187,15 +188,23 @@ public class adminController {
 	public String updateProduct(@ModelAttribute Product product, @RequestParam("file") MultipartFile image,
 			HttpSession session, Model m) {
 		
-		Product updateProduct = productService.updateProduct(product, image);
-		
-		if(!ObjectUtils.isEmpty(updateProduct)) {
-			session.setAttribute("successMsg", "Product updated Successfully..!");
-		}else {
-			session.setAttribute("errorMsg", "Something wrong on server..!");
+		System.out.println(product.getDiscount());
+
+		if (product.getDiscount() < 0 || product.getDiscount() >100) {
+			
+			session.setAttribute("errorMsg", "Please enter valid discount number..!");
+		} else {
+
+			Product updateProduct = productService.updateProduct(product, image);
+
+			if (!ObjectUtils.isEmpty(updateProduct)) {
+				session.setAttribute("successMsg", "Product updated Successfully..!");
+			} else {
+				session.setAttribute("errorMsg", "Something wrong on server..!");
+			}
 		}
 
-		return "redirect:/admin/editProduct/"+product.getId();
+		return "redirect:/admin/editProduct/" + product.getId();
 	}
 
 }

@@ -10,26 +10,31 @@ import lombok.Data;
 @Data
 @Entity
 public class Product {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@Column(length = 500)
 	private String title;
-	
+
 	@Column(length = 5000)
 	private String description;
-	
+
 	private String category;
-	
+
 	private String image;
-	
+
 	private int stock;
-	
+
 	private Double price;
-	
+
+	private int discount;
+
+	private Double discountPrice;
+
 	private String updatedTime;
-	
+
+	private Boolean isActive;
 
 }

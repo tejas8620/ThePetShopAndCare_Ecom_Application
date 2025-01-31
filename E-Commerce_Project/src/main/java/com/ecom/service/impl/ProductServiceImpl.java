@@ -64,8 +64,15 @@ public class ProductServiceImpl implements ProductService {
 		oldProduct.setCategory(product.getCategory());
 		oldProduct.setPrice(product.getPrice());
 		oldProduct.setStock(product.getStock());
+		oldProduct.setIsActive(product.getIsActive());
 		oldProduct.setUpdatedTime(commonService.getDateTime());
 		oldProduct.setImage(imageName);
+		oldProduct.setDiscount(product.getDiscount());
+
+		Double discount = product.getPrice() * (product.getDiscount() / 100.0);
+		Double discountPrice = product.getPrice() - discount;
+
+		oldProduct.setDiscountPrice(discountPrice);
 
 		Product updateProduct = productRepo.save(oldProduct);
 
@@ -79,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
 					e.printStackTrace();
 				}
 			}
-			
+
 			return updateProduct;
 		}
 
